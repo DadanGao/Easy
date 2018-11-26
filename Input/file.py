@@ -4,7 +4,6 @@ __author__ = 'Yang Ming 2018.11.26'
 from Input.gwt import GWTObjects
 import re
 import os
-
 re_story = r'story'
 re_scenario = r'scenario'
 re_given = r'given'
@@ -17,9 +16,7 @@ class GWTFile:
         self.__path = path_
         self.__file_name_list = []
         self.__gwt_obj = []
-
-    def gwt_check(self, obj):
-        pass
+        self.__check_note = ''
 
     def get_file_names(self):
         for root, dirs, files in os.walk(self.__path):
@@ -74,10 +71,20 @@ class GWTFile:
                         else:
                             self.__gwt_obj[-1].then.append(content.rstrip())
 
+    def gwt_check(self):
+        for obj in self.__gwt_obj:
+            pass
+        return True
+
     def get_gwt_objects(self):
         self.get_file_names()
         for files in self.__file_name_list:
             self.read_file(files)
+        if self.gwt_check() is True:
+            print(self.__check_note)
+            return self.__gwt_obj
+        else:
+            print(self.__check_note)
+            return None
 
-        return self.__gwt_obj
 
