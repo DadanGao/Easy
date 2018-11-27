@@ -2,6 +2,8 @@
 __author__ = 'Yang Ming 2018.11.26'
 
 from Input.GWT import GWTObjects
+from Input.input_checker import is_blank
+from Input.input_checker import fill_blanks
 import re
 import os
 re_story = r'story'
@@ -73,9 +75,17 @@ class GWTFile:
 
     def gwt_check(self):
         for obj in self.__gwt_obj:
-            pass
+            if is_blank(obj) is True:
+                obj.print_val()
+                self.__check_note = "Given or When blank error!"
+                return False
+        if fill_blanks(self.__gwt_obj) is False:
+            self.__check_note = "No Story, Scenario or Then found!"
+            return False
         return True
 
+    # return a list of gwt objects if success
+    # or None if failed
     def get_gwt_objects(self):
         self.get_file_names()
         for files in self.__file_name_list:

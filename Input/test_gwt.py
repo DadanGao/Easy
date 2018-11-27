@@ -25,6 +25,7 @@ test_path = './'
 
 file = GWTFile(test_path)
 objects = file.get_gwt_objects()
-for item in objects:
-    print(item.story, item.scenario, item.given, item.when, item.then)
+if objects is not None:
+    for item in objects:
+        item.print_val()
 # import from .txt file
