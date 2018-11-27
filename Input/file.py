@@ -1,7 +1,7 @@
 # GWTFile Class
 __author__ = 'Yang Ming 2018.11.26'
 
-from Input.gwt import GWTObjects
+from Input.GWT import GWTObjects
 import re
 import os
 re_story = r'story'

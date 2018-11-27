@@ -1,5 +1,5 @@
 # test code:
-from Input.gwt import GWTObjects
+from Input.GWT import GWTObjects
 from Input.file import GWTFile
 
 # import from test value
