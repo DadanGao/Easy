@@ -16,3 +16,6 @@ class GWTObjects(object):
         self.given = given_
         self.when = when_
         self.then = then_
+
+    def print_val(self):
+        print(self.story, self.scenario, self.given, self.when, self.then)

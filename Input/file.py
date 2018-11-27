@@ -2,6 +2,8 @@
 __author__ = 'Yang Ming 2018.11.26'
 
 from Input.GWT import GWTObjects
+from Input.input_checker import is_blank
+from Input.input_checker import fill_blanks
 import re
 import os
 
@@ -17,9 +19,7 @@ class GWTFile:
         self.__path = path_
         self.__file_name_list = []
         self.__gwt_obj = []
-
-    def gwt_check(self, obj):
-        pass
+        self.__check_note = ''
 
     def get_file_names(self):
         for root, dirs, files in os.walk(self.__path):
@@ -74,10 +74,28 @@ class GWTFile:
                         else:
                             self.__gwt_obj[-1].then.append(content.rstrip())
 
+    def gwt_check(self):
+        for obj in self.__gwt_obj:
+            if is_blank(obj) is True:
+                obj.print_val()
+                self.__check_note = "Given or When blank error!"
+                return False
+        if fill_blanks(self.__gwt_obj) is False:
+            self.__check_note = "No Story, Scenario or Then found!"
+            return False
+        return True
+
+    # return a list of gwt objects if success
+    # or None if failed
     def get_gwt_objects(self):
         self.get_file_names()
         for files in self.__file_name_list:
             self.read_file(files)
+        if self.gwt_check() is True:
+            print(self.__check_note)
+            return self.__gwt_obj
+        else:
+            print(self.__check_note)
+            return None
 
-        return self.__gwt_obj
 
