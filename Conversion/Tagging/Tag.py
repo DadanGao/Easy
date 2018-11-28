@@ -15,5 +15,6 @@ class Tag:
         self.postcondition = gwt.then
 
     def add_pre_into_precondition(self, gwt: GWTObjects):
-        for precond in gwt.when:
-            self.precondition.append(NLP.get_tag_of_input_string(precond))
+        nlp = NLP()
+        for precond in gwt.given:
+            self.precondition.append(nlp.get_tag_of_input_string(precond))
