@@ -19,6 +19,7 @@ class NLP:
         list1 = [原来的关键词，正反义标签，转换后的关键词]
         '''
         self.lists = []
+        self.load_pos_neg_dict(file_path)
 
     def add_pos_neg_word(self, word=None, tag=None, sub_word=None):
         '''
@@ -62,7 +63,6 @@ class NLP:
         :return: 该段字符串的tag
         '''
         tag = -1
-        sub_string = ""
         for l in self.lists:
             regex = r'' + l[0]
             re_compile = re.compile(regex, re.U)
