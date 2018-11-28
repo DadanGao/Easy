@@ -18,3 +18,19 @@ class Tag:
         nlp = NLP()
         for precond in gwt.given:
             self.precondition.append(nlp.get_tag_of_input_string(precond))
+
+    def print_tag(self):
+        print(self.story)
+        print(self.scenario)
+        for pre in self.precondition:
+            print(pre.content)
+            if pre.flag == '1':
+                print("积极" + " " + pre.flag)
+            if pre.flag == '2':
+                print('不是分支条件')
+            if pre.flag == '0':
+                print('消极' + " " + pre.flag)
+        for action in self.action:
+            print(action)
+        for post in self.postcondition:
+            print(post)

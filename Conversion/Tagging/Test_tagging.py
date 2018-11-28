@@ -15,4 +15,5 @@ gwt_objects = file.get_gwt_objects()
 transformer = GWTToTag()
 tag_objects = transformer.gwtlist_to_taglist(gwt_objects)
 for tag in tag_objects:
-    print(tag.story)
+    tag.print_tag()
+    print()
