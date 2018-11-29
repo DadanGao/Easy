@@ -29,9 +29,6 @@ class Tag:
             self.precondition.append(nlp.get_tag_of_input_string(precond))
 
     def print_tag(self):
-        '''
-        输出Tag类
-        '''
         print(self.story)
         print(self.scenario)
         for pre in self.precondition:
@@ -41,6 +38,7 @@ class Tag:
             print(action)
         for post in self.postcondition:
             print(post)
+
 
     def print_tag_switch(self, flag: int):
         '''

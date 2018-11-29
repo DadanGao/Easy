@@ -6,12 +6,14 @@ from Input.GWT import GWTObjects
 from Conversion.Tagging.Pre import Pre
 
 # import jieba
+
 import os
 import re
 
 re_positive_negative_dic = re.compile('^(.+?)( [0-9]+)( .+)?$', re.U)
 path = os.path.abspath('.')
 file_path = path + '/positive_negative_dic'
+
 
 
 class NLP:
@@ -30,6 +32,7 @@ class NLP:
         :param tag:标志
         '''
         self.lists.append([word, tag, sub_word])
+
 
     def participle(self, gwt: GWTObjects):
         '''

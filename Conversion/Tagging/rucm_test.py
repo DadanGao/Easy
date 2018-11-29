@@ -6,7 +6,6 @@ from Input.file import GWTFile
 from Conversion.Tagging.GWTToTag import GWTToTag
 from Conversion.BranchMerge.MergeBranch import MergeBranch
 
-
 # 得到gwt文件list
 path = os.path.abspath('../..')
 test_path = path + '/Input'
@@ -25,7 +24,7 @@ rucm_obj = merge_obj.rucm_obj
 # print(rucm_obj.basic_obj.story)
 # print(rucm_obj.basic_obj.scenario)
 #
-print(rucm_obj.specific_obj_list[0].specific_RFS)
+# print(rucm_obj.specific_obj_list[0].specific_RFS)
 for tag in tag_objects:
     tag.print_tag()
     print()
