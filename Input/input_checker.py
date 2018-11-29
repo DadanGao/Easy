@@ -1,10 +1,9 @@
 from Input.GWT import GWTObjects
 
 
-
-class input_checker(self):
+class InputChecker:
 	@staticmethod
-	def is_blank(self,obj):
+	def is_blank(obj):
 		if obj.given[0] is 'none':
 			return True
 		elif obj.when[0] is 'none':
@@ -13,7 +12,7 @@ class input_checker(self):
 			return False
 
 	@staticmethod
-	def fill_blanks(self,obj):
+	def fill_blanks(obj):
 		story_ = 'none'
 		scenario_ = 'none'
 		then_ = 'none'
