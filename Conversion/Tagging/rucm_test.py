@@ -28,4 +28,5 @@ rucm_obj = merge_obj.rucm_obj
 for tag in tag_objects:
     tag.print_tag()
     print()
+    print(" hello ")
 rucm_obj.rucm_print()
