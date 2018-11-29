@@ -2,8 +2,7 @@
 __author__ = 'Yang Ming 2018.11.26'
 
 from Input.GWT import GWTObjects
-from Input.input_checker import is_blank
-from Input.input_checker import fill_blanks
+from Input.input_checker import input_checker
 import re
 import os
 
@@ -76,11 +75,11 @@ class GWTFile:
 
     def gwt_check(self):
         for obj in self.__gwt_obj:
-            if is_blank(obj) is True:
+            if input_checker.is_blank(obj) is True:
                 obj.print_val()
                 self.__check_note = "Given or When blank error!"
                 return False
-        if fill_blanks(self.__gwt_obj) is False:
+        if input_checker.fill_blanks(self.__gwt_obj) is False:
             self.__check_note = "No Story, Scenario or Then found!"
             return False
         return True
