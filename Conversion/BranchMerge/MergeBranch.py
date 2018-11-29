@@ -156,4 +156,3 @@ if __name__ == '__main__':
     b = [0]*len(a)
     b += a
     print(b)
-
