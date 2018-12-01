@@ -1,40 +1,31 @@
 from Input.GWT import GWTObjects
 from jieba import jieba
 import jieba.jieba.posseg as psg
-test_given = ['1.系统已启动', 'a.参数合法', 'b 计算结果满足要求', '一、参数不合法', '计算结果不满足要求']
-
-
-def copy_string(cut_str):
-	result = ['', ]
-	for word in cut_str:
-		result.append(word)
-	return "".join(result)
+test_given = ['1.系统已启动', 'a. 参数合法', 'b 计算结果满足要求', '一、参数不合法', '第五计算结果不满足要求']
 
 
 def clear_s(string):
 	cut_str = psg.cut(string)
+	new_str = []
+	st = False
 	for word, flag in cut_str:
-		if flag is 'm' or flag is 'n' or flag is 'x' or flag is 'eng':
+		if (flag is 'm' or flag is 'x') and st is False:
 			pass
 		else:
-			copy_string(cut_str)
-			break
-	print("".join(cut_str))
-
-
-for item in test_given:
-	clear_s(item)
+			new_str += word
+			st = True
+	return ''.join(new_str)
 
 
 class InputChecker:
 	@staticmethod
 	def remove_serial(obj):
-		for given in obj.given:
-			clear_s(given)
-		for when in obj.when:
-			clear_s(when)
-		for then in obj.then:
-			clear_s(then)
+		for i in range(len(obj.given)):
+			obj.given[i] = clear_s(obj.given[i])
+		for i in range(len(obj.when)):
+			obj.when[i] = clear_s(obj.when[i])
+		for i in range(len(obj.then)):
+			obj.then[i] = clear_s(obj.then[i])
 
 	@staticmethod
 	def is_blank(obj):
