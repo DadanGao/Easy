@@ -1,3 +1,0 @@
-[submodule "jieba"]
-	path = jieba
-	url = https://github.com/Ming-Yang/jieba.git
