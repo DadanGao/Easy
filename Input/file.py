@@ -75,6 +75,7 @@ class GWTFile:
 
     def gwt_check(self):
         for obj in self.__gwt_obj:
+            InputChecker.remove_serial(obj)
             if InputChecker.is_blank(obj) is True:
                 obj.print_val()
                 self.__check_note = "Given or When blank error!"
@@ -82,6 +83,7 @@ class GWTFile:
         if InputChecker.fill_blanks(self.__gwt_obj) is False:
             self.__check_note = "No Story, Scenario or Then found!"
             return False
+
         return True
 
     # return a list of gwt objects if success
