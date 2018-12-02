@@ -26,7 +26,7 @@ class Tag:
         '''
         nlp = NLP()
         for precond in gwt.given:
-            self.precondition.append(nlp.get_tag_of_input_string(precond))
+            self.precondition.append(nlp.get_flag_of_input_string(precond))
 
     def print_tag(self):
         print(self.story)

@@ -71,7 +71,7 @@ class NLP:
                 sub_word = sub_word.strip()
             self.add_pos_neg_word(word, tag, sub_word)
 
-    def get_tag_of_input_string(self, s1):
+    def get_flag_of_input_string(self, s1):
         '''
         :param s1: given list中的一个precondition
         :return: 该段字符串的flag
