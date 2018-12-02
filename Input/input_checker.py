@@ -1,7 +1,32 @@
 from Input.GWT import GWTObjects
+from jieba import jieba
+import jieba.jieba.posseg as psg
+test_given = ['1.系统已启动', 'a. 参数合法', 'b 计算结果满足要求', '一、参数不合法', '第五计算结果不满足要求']
+
+
+def clear_s(string):
+	cut_str = psg.cut(string)
+	new_str = []
+	st = False
+	for word, flag in cut_str:
+		if (flag is 'm' or flag is 'x' or flag is 'eng') and st is False:
+			pass
+		else:
+			new_str += word
+			st = True
+	return ''.join(new_str)
 
 
 class InputChecker:
+	@staticmethod
+	def remove_serial(obj):
+		for i in range(len(obj.given)):
+			obj.given[i] = clear_s(obj.given[i])
+		for i in range(len(obj.when)):
+			obj.when[i] = clear_s(obj.when[i])
+		for i in range(len(obj.then)):
+			obj.then[i] = clear_s(obj.then[i])
+
 	@staticmethod
 	def is_blank(obj):
 		if obj.given[0] is 'none':

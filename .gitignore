@@ -1,6 +1,7 @@
 *.xml
 *.pyc
 *.orig
+*/.pytest_cache
 .idea/
 .DS_Store
 .pytest_cache/
