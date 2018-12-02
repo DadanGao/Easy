@@ -9,7 +9,7 @@ def clear_s(string):
 	new_str = []
 	st = False
 	for word, flag in cut_str:
-		if (flag is 'm' or flag is 'x') and st is False:
+		if (flag is 'm' or flag is 'x' or flag is 'eng') and st is False:
 			pass
 		else:
 			new_str += word
