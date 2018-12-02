@@ -3,7 +3,7 @@
 
 # update notes
 ## 2018.12.2
-    导入RUCM关键字
+    默认导入RUCM关键字
     导入领域背景词汇，放置在dict文件夹下
 [参考方法：载入词典一节](https://github.com/Ming-Yang/jieba)
 ## 2018.12.1 
