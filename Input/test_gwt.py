@@ -20,12 +20,13 @@ test_obj = [GWTObjects(test_story, test_scenario, test_given[0], test_when[0], t
             GWTObjects(test_story, test_scenario, test_given[4], test_when[4])]
 # import from test value
 
-# import from .txt file
+# import from .txt file or path
 test_path = './gwt files'
+test_file = './gwt files/gwt.txt'
 
-file = GWTFile(test_path)
+file = GWTFile(test_file)
 objects = file.get_gwt_objects()
 if objects is not None:
     for item in objects:
         item.print_val()
-# import from .txt file
+# import from .txt file or path
