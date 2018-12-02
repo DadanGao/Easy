@@ -25,10 +25,13 @@ class GWTFile:
 
     @staticmethod
     def get_names(path, name_list):
-        for root, dirs, files in os.walk(path):
-            for file in files:
-                if os.path.splitext(file)[1] == '.txt':
-                    name_list.append(os.path.join(os.path.abspath(root), file))
+        if os.path.isfile(path):
+            name_list.append(path)
+        else:
+            for root, dirs, files in os.walk(path):
+                for file in files:
+                    if os.path.splitext(file)[1] == '.txt':
+                        name_list.append(os.path.join(os.path.abspath(root), file))
 
     def read_file(self, filename):
         f_story = f_scenario = f_given = f_when = f_then = False
