@@ -1,4 +1,4 @@
-
+import re
 # from Conversion.BranchMerge.BoundedFlow import BoundedFlow
 # from Conversion.BranchMerge.SpecificFlow import SpecificFlow
 # from Conversion.BranchMerge.GlobleFlow import GlobleFlow
@@ -9,7 +9,20 @@ class RUCM:
         #下面是整个RUCM按照正常执行的各表目属性
         #basic属性是一个字典，
         #其中0下标对应zero，一个填补
+        #pattern = re.compile(r'as a (u[\u4E00-\u9FA5]+)[,|，]I want to (u[\u4E00-\u9FA5]+)', re.I)
+        pattern = re.compile(r'as a ([a-zA-Z\u4E00-\u9FA5]+)[,|，]I want to ([a-zA-Z\u4E00-\u9FA5]+)', re.I)
+        m = pattern.match(low_rucm["basic_obj"].story)
+        if(m):
+            self.userCaseName = m.group(2)
+            self.mainActor = m.group(1)
+        else: print("参与者和简短描述匹配失败")
+
+        self.secondActor = None
+        self.dependency = None
+        self.generalization = None
+
         self.basic_obj = low_rucm["basic_obj"]
+        self.basic_obj.basic_steps_list.pop(0)
         #下面是分支对象列表
         self.bounded_obj_list = low_rucm["bounded_obj_list"]
         self.specific_obj_list = low_rucm["specific_obj_list"]
@@ -19,6 +32,7 @@ class RUCM:
     def rucm_print(self):
         print("story : ",self.basic_obj.story)
         print("scenario : ",self.basic_obj.scenario)
+        print("precondition : ",self.basic_obj.precondition)
         print("BASIC FLOW")
         for i in range(1,len(self.basic_obj.basic_steps_list)):
             print("step",i," : ",self.basic_obj.basic_steps_list[i])

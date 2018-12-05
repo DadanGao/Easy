@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>需求文档转换结果</title>
+        <style type="text/css">
+        </style>
+    </head>
+    <body>
+        <table border="2" width="100%">
+            <caption>GWT文档与RUCM文档对比</caption>
+            <tr>
+              <th>GWT文档</th>
+              <th>RUCM文档</th>
+            </tr>
+            <tr>
+              <td width="40%">
+                <div class="panel-body" style="height: 600px; overflow:scroll">
+                    <div style="border: 1px  #000000; width: 98%; margin: 0 auto;">
+                        <span>
+                          {% for line in GWT%}
+                            <li>{{ line }}</li>
+                          {% endfor %}
+                        </span>
+                    </div>
+                </div>
+                </td>
+                <td width="60%">
+                    <div class="panel-body" style="height: 600px; overflow:scroll">
+                        <div style="border: 1px  #000000; width: 98%; margin: 0 auto;">
+                            <table border="1" width="100%" style="border-color: #89c5ee">
+                                <caption>自动生成的RUCM文档</caption>
+                                <tr>
+                                  <th width="30%">User Case Name</th>
+                                  <td width="70%">{{RUCM.userCaseName}}</td>
+                                </tr>
+                                <tr>
+                                  <th>Brief Description</th>
+                                  <td>{{RUCM.basic_obj.scenario}}</td>
+                                </tr>
+                                <tr>
+                                  <th>Precondition</th>
+                                  <td>
+                                      {% if RUCM.basic_obj.precondition %}
+                                          {% for bp in RUCM.basic_obj.precondition%}
+                                            {% ifequal forloop.counter 1 %}{% else %}并且{% endifequal %}{{ bp }}
+                                          {% endfor %}
+                                      {% else %}
+                                        <p>None</p>
+                                      {% endif %}
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <th>Primary Actor</th>
+                                  <td>{{RUCM.mainActor}}</td>
+                                </tr>
+                                <tr>
+                                  <th>Secondary Actor</th>
+                                  <td>{% ifequal RUCM.secondActor None %}None{% else %}{{RUCM.secondActor}}{% endifequal %}</td>
+                                </tr>
+                                <tr>
+                                  <th>Dependency</th>
+                                  <td>{% ifequal RUCM.dependency None %}None{% else %}{{RUCM.dependency}}{% endifequal %}</td>
+                                </tr>
+                                <tr>
+                                  <th>Generalization</th>
+                                  <td>{% ifequal RUCM.generalization None %}None{% else %}{{RUCM.generalization}}{% endifequal %}</td>
+                                </tr>
+                            </table>
+                            <table border="1"  width="100%"  cellspacing="0" style="border-color: #89c5ee">
+                                <tr>
+                                  <th width="30%">Basic Flow</th>
+                                  <td width="70%">
+                                      <table  border="1" width="100%"  cellspacing="0">
+                                          <th>Steps</th>
+                                          {% for bf in RUCM.basic_obj.basic_steps_list%}
+                                                <tr><td>{{forloop.counter}} {{ bf }}</td></tr>
+                                          {% endfor %}
+                                          <tr><td><table width="100%" cellspacing="0"><tr><th width="20%">Postcondition: </th><td width="80%">
+                                              {% if RUCM.basic_obj.postcondition %}
+                                                  {% for bp in RUCM.basic_obj.postcondition%}
+                                                    {% ifequal forloop.counter 1 %}{% else %}并且{% endifequal %}{{ bp }}
+                                                  {% endfor %}
+                                              {% else %}
+                                                <p>None</p>
+                                              {% endif %}
+
+                                          </td></tr></table></td></tr>
+                                      </table>
+                                  </td>
+                                </tr>
+                            </table>
+
+                            <!--特定分支流-->
+                            {% for sf in RUCM.specific_obj_list%}
+                                <table border="1" width="100%" style="margin-top: 10px;border-color: #89c5ee" cellspacing="0">
+                                    <th width="30%">Specific Alternative Flow</th>
+                                    <td width="70%"><table  border="1" width="100%"  cellspacing="0">
+                                          <th>RFS {{sf.specific_RFS}}</th>
+                                          {% for bf in sf.actions%}
+                                                <tr><td>{{forloop.counter}} {{ bf }}</td></tr>
+                                          {% endfor %}
+                                          <tr><td><table width="100%" cellspacing="0"><tr><th width="20%">Postcondition: </th><td width="80%">
+                                              {% if sf.postcondition %}
+                                                  {% for bp in sf.postcondition%}
+                                                    {% ifequal forloop.counter 1 %}{% else %}并且{% endifequal %}{{ bp }}
+                                                  {% endfor %}
+                                              {% else %}
+                                                <p>None</p>
+                                              {% endif %}
+                                          </td></tr></table></td></tr>
+                                      </table></td>
+                                </table>
+                            {% endfor %}
+
+                            <!--边界分支流-->
+                            {% for sf in RUCM.bounded_obj_list%}
+                                <table border="1" width="100%" style="margin-top: 10px;border-color: #89c5ee" cellspacing="0">
+                                    <th width="30%">Bounded Alternative Flow</th>
+                                    <td width="70%"><table  border="1" width="100%"  cellspacing="0">
+                                          <th>RFS {{sf.specific_RFS}}</th>
+                                          {% for bf in sf.actions%}
+                                                <tr><td>{{forloop.counter}} {{ bf }}</td></tr>
+                                          {% endfor %}
+                                          <tr><td><table width="100%" cellspacing="0"><tr><th width="20%">Postcondition: </th><td width="80%">
+                                              {% if sf.postcondition %}
+                                                  {% for bp in sf.postcondition%}
+                                                    {% ifequal forloop.counter 1 %}{% else %}并且{% endifequal %}{{ bp }}
+                                                  {% endfor %}
+                                              {% else %}
+                                                <p>None</p>
+                                              {% endif %}
+                                          </td></tr></table></td></tr>
+                                      </table></td>
+                                </table>
+                            {% endfor %}
+
+                            <!--全局分支流-->
+                            {% for sf in RUCM.globale_obj_list%}
+                                <table border="1" width="100%" style="margin-top: 10px;border-color: #89c5ee" cellspacing="0">
+                                    <th width="30%">Global Alternative Flow</th>
+                                    <td width="70%"><table  border="1" width="100%">
+                                          <th>{{sf.precondition}}</th>
+                                          {% for bf in sf.action%}
+                                                <tr><td>{{forloop.counter}} {{ bf }}</td></tr>
+                                          {% endfor %}
+                                          <tr><td><table border="1" width="100%" cellspacing="0"><tr><th width="20%">Postcondition: </th><td width="80%">
+                                              {% if sf.postcondition %}
+                                                  {% for bp in sf.postcondition%}
+                                                    {% ifequal forloop.counter 1 %}{% else %}并且{% endifequal %}{{ bp }}
+                                                  {% endfor %}
+                                              {% else %}
+                                                <p>None</p>
+                                              {% endif %}
+                                          </td></tr></table></td></tr>
+                                      </table></td>
+                                </table>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

@@ -19,7 +19,7 @@ class Pre:
     操作员退出 GLOBAL
     GLOBAL 分支条件
     '''
-    flag: int
+    flag: int;
 
     def __init__(self, s='', tag=1):
         # str类型，将gwt对象的given list处理后得到的内容

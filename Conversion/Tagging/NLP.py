@@ -11,7 +11,7 @@ import os
 import re
 
 re_positive_negative_dic = re.compile('^(.+?)( [0-9]+)( .+)?$', re.U)
-path = os.path.abspath('.')
+path = os.path.abspath('../Conversion/Tagging')
 file_path = path + '/positive_negative_dic'
 
 
