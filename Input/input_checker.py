@@ -1,11 +1,14 @@
-from Input.GWT import GWTObjects
 import jieba
 import jieba.posseg as psg
+import os
 test_given = ['1.系统已启动', 'a. 参数合法', 'b 计算结果满足要求', '一、参数不合法', '第五计算结果不满足要求']
 
+input_folder_path = os.path.split(os.path.abspath(__file__))[0]
 
 def clear_s(string):
-	cut_str = psg.cut(string)
+	jieba.load_userdict(input_folder_path + '/dict/RUCM_keywords.txt')
+	cut_str = jieba.posseg.cut(string)
+	# cut_str = psg.cut(string)
 	new_str = []
 	st = False
 	for word, flag in cut_str:

@@ -118,7 +118,8 @@ class NLP:
             sentence_list = re.split(pattern, s1)
             length = len(sentence_list)
             resultlist.append(Tag_of_action(sentence_list[0], 'do_start'))
-            resultlist.append(Tag_of_action(sentence_list[length - 1], 'until'))
+            if 'UNTIL' in s1:
+                resultlist.append(Tag_of_action(sentence_list[length - 1], 'until'))
             if length > 2:
                 for i in range(1, length - 1):
                     resultlist.append(Tag_of_action(sentence_list[i], 'do_mid'))

@@ -25,8 +25,8 @@ rucm_obj = merge_obj.rucm_obj
 # print(rucm_obj.basic_obj.scenario)
 #
 # print(rucm_obj.specific_obj_list[0].specific_RFS)
-for tag in tag_objects:
-    tag.print_tag()
-    print()
+# for tag in tag_objects:
+#     tag.print_tag()
+#     print()
     # print(" hello ")
 rucm_obj.rucm_print()

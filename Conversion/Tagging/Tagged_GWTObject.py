@@ -39,6 +39,16 @@ class All_Tagged_GWTObject:
         for precond in gwt.given:
             self.precondition.append(nlp.get_flag_of_input_string(precond))
 
+    def print_allTaggedGWTObject(self):
+        print(self.story)
+        print(self.scenario)
+        for pre in self.precondition:
+            print(pre.content + '[' + str(pre.flag) + ']')
+        for ac in self.action:
+            print(ac.content + '[' + ac.type + ']')
+        for post in self.postcondition:
+            print(post.content + '[' + post.type + ']')
+
 
 class Tagged_GWTObject:
     # def __init__(self, gwt: GWTObjects):

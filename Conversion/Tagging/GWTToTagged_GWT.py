@@ -16,6 +16,7 @@ class GWTToTag:
         allTagged_gwt.add_pre_into_precondition(gwt)
         allTagged_gwt.add_type_into_action(gwt)
         allTagged_gwt.add_type_into_postcondition(gwt)
+        # allTagged_gwt.print_allTaggedGWTObject()
         tagged_gwt = Tagged_GWTObject(allTagged_gwt)
         return tagged_gwt
 
