@@ -1,6 +1,6 @@
 from Input.GWT import GWTObjects
-from jieba import jieba
-import jieba.jieba.posseg as psg
+import jieba
+import jieba.posseg as psg
 test_given = ['1.系统已启动', 'a. 参数合法', 'b 计算结果满足要求', '一、参数不合法', '第五计算结果不满足要求']
 
 

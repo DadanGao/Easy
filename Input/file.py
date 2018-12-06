@@ -3,7 +3,7 @@ __author__ = 'Yang Ming 2018.11.26'
 
 from Input.GWT import GWTObjects
 from Input.input_checker import InputChecker
-from jieba import jieba
+import jieba
 import re
 import os
 

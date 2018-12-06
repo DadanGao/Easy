@@ -1,14 +1,15 @@
-from Conversion.Tagging.Tag import Tag
+from Conversion.Tagging.Tagged_GWTObject import Tagged_GWTObject
 from Conversion.BranchMerge.BoundedFlow import BoundedFlow
 from Conversion.BranchMerge.SpecificFlow import SpecificFlow
 from Conversion.BranchMerge.GlobleFlow import GlobleFlow
 from Conversion.BranchMerge.BasicFlow import BasicFlow
 from Conversion.BranchMerge.RUCM import RUCM
 
-#分支合并类
+
+# 分支合并类
 class MergeBranch:
-    def __init__(self,tag_list):
-        #保存每个tag的pre 状态
+    def __init__(self, tag_list):
+        # 保存每个tag的pre 状态
         state = self.tag_pre_state_list(tag_list)
 
         # basic_flow = []
@@ -18,12 +19,13 @@ class MergeBranch:
             if state[i] == 1:
                 one_state_num += 1
 
-
-        basic_dir = self.get_basic_dir(state=state,tag_list=tag_list)
+        basic_dir = self.get_basic_dir(state=state, tag_list=tag_list)
         basic_obj = BasicFlow(basic_dir)
 
-# 标识，该小gwt整个pre list的状态，包括，整体开头为0,整体正常为1，bounded为2，specific为3，globle为4
-        bound_Obj_list,specific_Obj_list,globle_Obj_list = self.get_bound_specific_globle_list(state=state,tag_list=tag_list,basic_dir=basic_dir)
+        # 标识，该小gwt整个pre list的状态，包括，整体开头为0,整体正常为1，bounded为2，specific为3，globle为4
+        bound_Obj_list, specific_Obj_list, globle_Obj_list = self.get_bound_specific_globle_list(state=state,
+                                                                                                 tag_list=tag_list,
+                                                                                                 basic_dir=basic_dir)
 
         low_rucm = {}
         low_rucm["basic_obj"] = basic_obj
@@ -33,7 +35,7 @@ class MergeBranch:
 
         self.rucm_obj = RUCM(low_rucm)
 
-    def tag_pre_state_list(self,tag_list):
+    def tag_pre_state_list(self, tag_list):
         state = [0] * len(tag_list)
         for i in range(len(tag_list)):
             # pre 是每一个小gwt的pre list
@@ -58,20 +60,20 @@ class MergeBranch:
                     else:
                         this_tag_pre_state = 3
             state[i] = this_tag_pre_state
-            print(pre[-1].content,state[i])
+            print(pre[-1].content, state[i])
         return state
 
-    def get_basic_dir(self,state,tag_list):
+    def get_basic_dir(self, state, tag_list):
         one_state_num = 0
         for i in range(len(state)):
             if state[i] == 1:
                 one_state_num += 1
-        print("one_state_num is ",one_state_num)
+        print("one_state_num is ", one_state_num)
         basic_dir = {}
         basic_dir["post"] = ["zero"]
         for i in range(len(state)):
             if state[i] == 0:
-                print("in state 0,i = ",i)
+                print("in state 0,i = ", i)
                 basic_dir["story"] = tag_list[i].story
                 basic_dir["scenario"] = tag_list[i].scenario
                 pre_list = []
@@ -86,13 +88,13 @@ class MergeBranch:
 
         cycle_num = one_state_num
         for i in range(cycle_num):
-            print("cyscle num is ",cycle_num)
+            print("cyscle num is ", cycle_num)
             for j in range(len(state)):
                 if state[j] == 1:
                     print("in state 1,i = ", j)
                     one_state_num = one_state_num - 1
                     this_content = tag_list[j].precondition[-1].content
-                    print("in state 1 content is : ",this_content)
+                    print("in state 1 content is : ", this_content)
                     if this_content in basic_dir["basic_steps_list"][-1]:
                         basic_dir["basic_steps_list"] += tag_list[j].action
                         if one_state_num != 0:
@@ -103,7 +105,7 @@ class MergeBranch:
                             # print("postcondition = ",basic_dir["postcondition"], tag_list[i].postcondition)
         return basic_dir
 
-    def get_bound_specific_globle_list(self,state,tag_list,basic_dir):
+    def get_bound_specific_globle_list(self, state, tag_list, basic_dir):
         bound_Obj_list = []
         specific_Obj_list = []
         globle_Obj_list = []
@@ -149,10 +151,11 @@ class MergeBranch:
                 globle_obj = GlobleFlow(globle_dir)
                 globle_Obj_list.append(globle_obj)
 
-        return bound_Obj_list,specific_Obj_list,globle_Obj_list
+        return bound_Obj_list, specific_Obj_list, globle_Obj_list
+
 
 if __name__ == '__main__':
-    a = [1,2,3]
-    b = [0]*len(a)
+    a = [1, 2, 3]
+    b = [0] * len(a)
     b += a
     print(b)

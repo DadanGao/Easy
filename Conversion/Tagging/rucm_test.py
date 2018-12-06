@@ -3,7 +3,7 @@
 
 import os
 from Input.file import GWTFile
-from Conversion.Tagging.GWTToTag import GWTToTag
+from Conversion.Tagging.GWTToTagged_GWT import GWTToTag
 from Conversion.BranchMerge.MergeBranch import MergeBranch
 
 # 得到gwt文件list
@@ -28,5 +28,5 @@ rucm_obj = merge_obj.rucm_obj
 for tag in tag_objects:
     tag.print_tag()
     print()
-    print(" hello ")
+    # print(" hello ")
 rucm_obj.rucm_print()

@@ -3,7 +3,9 @@
 # -*- coding: utf-8 -*-
 
 from Input.GWT import GWTObjects
-from Conversion.Tagging.Pre import Pre
+from Conversion.Tagging.Tag_of_precondition import Tag
+from Conversion.Tagging.Tag_of_action import Tag_of_action
+from Conversion.Tagging.Tag_of_postcondition import Tag_of_postcondition
 
 # import jieba
 
@@ -14,6 +16,7 @@ re_positive_negative_dic = re.compile('^(.+?)( [0-9]+)( .+)?$', re.U)
 path = os.path.abspath('.')
 file_path = path + '/positive_negative_dic'
 
+pattern = r',|\.|/|;|\'|`|\[|\]|<|>|\?|:|"|\{|\}|\~|!|@|#|\$|%|\^|&|\(|\)|-|=|\_|\+|，|。|、|；|‘|’|【|】|·|！|…|（|）'
 
 
 class NLP:
@@ -32,7 +35,6 @@ class NLP:
         :param tag:标志
         '''
         self.lists.append([word, tag, sub_word])
-
 
     def participle(self, gwt: GWTObjects):
         '''
@@ -71,7 +73,7 @@ class NLP:
                 sub_word = sub_word.strip()
             self.add_pos_neg_word(word, tag, sub_word)
 
-    def get_tag_of_input_string(self, s1):
+    def get_flag_of_input_string(self, s1):
         '''
         :param s1: given list中的一个precondition
         :return: 该段字符串的flag
@@ -91,5 +93,58 @@ class NLP:
                 break
         if flag == -1:
             flag = 2
-        pre1 = Pre(s1, flag)
+        pre1 = Tag(s1, flag)
         return pre1
+
+    def get_type_of_action(self, s1=''):
+        '''
+        得到
+        :param s1:string, action
+        :return:
+        '''
+        resultlist = []
+        _type = ''
+        if 'INCLUDE' in s1:
+            _type = 'include'
+            tag_action = Tag_of_action(s1, _type)
+            resultlist.append(tag_action)
+            return resultlist
+        elif 'EXTEND' in s1:
+            _type = 'extend'
+            tag_action = Tag_of_action(s1, _type)
+            resultlist.append(tag_action)
+            return resultlist
+        elif 'DO' in s1:
+            sentence_list = re.split(pattern, s1)
+            length = len(sentence_list)
+            resultlist.append(Tag_of_action(sentence_list[0], 'do_start'))
+            resultlist.append(Tag_of_action(sentence_list[length - 1], 'until'))
+            if length > 2:
+                for i in range(1, length - 1):
+                    resultlist.append(Tag_of_action(sentence_list[i], 'do_mid'))
+            return resultlist
+
+        elif '如果' in s1:
+            sentence_list = re.split(pattern, s1)
+            length = len(sentence_list)
+            resultlist.append(Tag_of_action(sentence_list[0].replace('如果', 'IF ') + ' Then', 'if_start'))
+            for i in range(1, length):
+                if '如果' not in sentence_list[i]:
+                    resultlist.append(Tag_of_action(sentence_list[i].replace('那么', ''), 'normal'))
+                if '如果' in sentence_list[i]:
+                    resultlist.append(Tag_of_action(sentence_list[0].replace('如果', 'ELSEIF ') + ' Then', 'if_mid'))
+            resultlist.append(Tag_of_action('ENDIF', 'normal'))
+            return resultlist
+        else:
+            _type = 'normal'
+            tag_action = Tag_of_action(s1, _type)
+            resultlist.append(tag_action)
+            return resultlist
+
+    def get_type_of_postcondition(self, s1=''):
+        result_list = []
+        if '验证' in s1:
+            result_list.append(Tag_of_postcondition(s1, 'validation'))
+        else:
+            result_list.append(Tag_of_postcondition(s1, 'none_validation'))
+        return result_list
