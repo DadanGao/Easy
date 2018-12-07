@@ -1,9 +1,13 @@
 from django.http import HttpResponse
 from django.template import loader
 import sys
-sys.path.append(r'E:\master\workspace\python\gaoruan\Easy')
+import os
+# sys.path.append(r'E:\master\workspace\python\gaoruan\Easy')
+
+path = os.path.abspath("../")
+sys.path.append(path)
 from Input.file import GWTFile
-from Conversion.Tagging.GWTToTag import GWTToTag
+from Conversion.Tagging.GWTToTagged_GWT import GWTToTag
 from Conversion.BranchMerge.MergeBranch import MergeBranch
 
 def index(request):
