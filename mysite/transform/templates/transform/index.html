@@ -4,31 +4,26 @@
     <meta charset="UTF-8">
     <title>需求文档自动生成</title>
     <style type="text/css">
-        #mybtn{
-            width: 100px;
-            height: 30px;
-            font-size: 18px;
-            background-color: lightcoral;
-            text-align: center;
+        body{
+            background:url(../../static/transform/index_bg.jpg) no-repeat center 0px;
+        }
+        div.myform{
+            position:absolute;
+            left:585px;
+            top:339px;
+            width: 550px;
         }
     </style>
 </head>
 <body>
-    {% if member_list %}
-        <ul>
-        {% for member in member_list %}
-            <li>{{ member.name }}</li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>该小组没有成员</p>
-    {% endif %}
-    <form action="{% url 'transform:transform'%}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="file" name="theFile" accept=".txt" onchange="document.getElementById('theFilePath').value=this.value"/>  
-        <input type="hidden" id="theFilePath" name="theFilePath" value="">
-        <input type="submit" value="选择GWT文件" />
-    </form>
+    <div class="myform">
+        <form action="{% url 'transform:transform'%}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" style="width:280px;height:50px;background-color:darkred;color: yellowgreen" name="theFile" accept=".txt" onchange="document.getElementById('theFilePath').value=this.value"/>  
+            <input type="hidden" id="theFilePath" name="theFilePath" value="">
+            <input type="submit" style="width:100px;height:50px;background-color:darkred;color: yellowgreen" value="选择GWT文件" />
+        </form>
+    </div>
 </body>
 
 </html>

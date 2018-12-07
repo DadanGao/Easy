@@ -52,7 +52,7 @@
                                 </tr>
                                 <tr>
                                   <th>Primary Actor</th>
-                                  <td>{{RUCM.mainActor}}</td>
+                                  <td>{{RUCM.primaryActor}}</td>
                                 </tr>
                                 <tr>
                                   <th>Secondary Actor</th>
@@ -118,7 +118,10 @@
                                 <table border="1" width="100%" style="margin-top: 10px;border-color: #89c5ee" cellspacing="0">
                                     <th width="30%">Bounded Alternative Flow</th>
                                     <td width="70%"><table  border="1" width="100%"  cellspacing="0">
-                                          <th>RFS {{sf.specific_RFS}}</th>
+                                          <th>RFS {% for rfs in sf.bound_RFS_index_list%}
+                                                     {{ bp }}
+                                                  {% endfor %}
+                                          </th>
                                           {% for bf in sf.actions%}
                                                 <tr><td>{{forloop.counter}} {{ bf }}</td></tr>
                                           {% endfor %}
@@ -144,7 +147,7 @@
                                           {% for bf in sf.action%}
                                                 <tr><td>{{forloop.counter}} {{ bf }}</td></tr>
                                           {% endfor %}
-                                          <tr><td><table border="1" width="100%" cellspacing="0"><tr><th width="20%">Postcondition: </th><td width="80%">
+                                          <tr><td><table border="0" width="100%" cellspacing="0"><tr><th width="20%">Postcondition: </th><td width="80%">
                                               {% if sf.postcondition %}
                                                   {% for bp in sf.postcondition%}
                                                     {% ifequal forloop.counter 1 %}{% else %}并且{% endifequal %}{{ bp }}

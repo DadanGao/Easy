@@ -7,7 +7,7 @@ from Conversion.Tagging.GWTToTag import GWTToTag
 from Conversion.BranchMerge.MergeBranch import MergeBranch
 
 def index(request):
-    member_list = [{"id":"SY1706341","name":"宋立军"}]
+    member_list = [{"id":"SY1706341","name":"高玉林"},{"id":"SY1706341","name":"安辽源"},{"id":"SY1706341","name":"杨明"},{"id":"SY1706341","name":"李雪桐"},{"id":"SY1706341","name":"宋立军"}]
     template = loader.get_template('transform/index.html')
     context = {
         'member_list': member_list,
@@ -34,6 +34,10 @@ def transform(request):
     merge_obj = MergeBranch(tag_objects)
     rucm_obj = merge_obj.rucm_obj
     rucm_obj.rucm_print()
+
+    fps = filepath.split("\\")
+    fps[-1]='RUCM_result.xls'
+    rucm_obj.saveAsFile("\\".join(fps))
 
     template = loader.get_template('transform/result.html')
     context = {
