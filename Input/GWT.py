@@ -18,4 +18,5 @@ class GWTObjects(object):
         self.then = then_
 
     def print_val(self):
+        print("GWTObjects:")
         print(self.story, self.scenario, self.given, self.when, self.then)
