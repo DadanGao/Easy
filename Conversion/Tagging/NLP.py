@@ -73,7 +73,7 @@ class NLP:
                 sub_word = sub_word.strip()
             self.add_pos_neg_word(word, tag, sub_word)
 
-    def get_flag_of_input_string(self, s1):
+    def get_flag_of_precondition(self, s1):
         '''
         :param s1: given list中的一个precondition
         :return: 该段字符串的flag
@@ -95,6 +95,11 @@ class NLP:
             flag = 2
         pre1 = Tag(s1, flag)
         return pre1
+
+
+    def get_type_of_precondition(self):
+        pass
+
 
     def get_type_of_action(self, s1=''):
         '''

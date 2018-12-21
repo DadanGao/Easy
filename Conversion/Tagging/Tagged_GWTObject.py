@@ -37,7 +37,7 @@ class All_Tagged_GWTObject:
         '''
         nlp = NLP()
         for precond in gwt.given:
-            self.precondition.append(nlp.get_flag_of_input_string(precond))
+            self.precondition.append(nlp.get_flag_of_precondition(precond))
 
     def print_allTaggedGWTObject(self):
         print(self.story)
@@ -81,7 +81,7 @@ class Tagged_GWTObject:
         '''
         nlp = NLP()
         for precond in gwt.given:
-            self.precondition.append(nlp.get_flag_of_input_string(precond))
+            self.precondition.append(nlp.get_flag_of_precondition(precond))
 
     def print_tag(self):
         print(self.story)
