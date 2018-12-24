@@ -2,7 +2,7 @@
 # !/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from Conversion.Tagging.NLP import NLP
+# from Conversion.Tagging.NLP import NLP
 from Input.GWT import GWTObjects
 
 
@@ -19,25 +19,26 @@ class All_Tagged_GWTObject:
         # list类型，tag_of_postcondition
         self.postcondition = []
 
-    def add_type_into_action(self, gwt: GWTObjects):
-        nlp = NLP()
-        for action in gwt.when:
-            list1 = nlp.get_type_of_action(action)
-            self.action.extend(list1)
+    # def add_type_into_action(self, gwt: GWTObjects):
+    #     nlp = NLP()
+    #     for action in gwt.when:
+    #         list1 = nlp.get_type_of_action(action)
+    #         self.action.extend(list1)
+    #
+    # def add_type_into_postcondition(self, gwt: GWTObjects):
+    #     nlp = NLP()
+    #     for postcon in gwt.then:
+    #         self.postcondition.extend(nlp.get_type_of_postcondition(postcon))
+    #
+    # def add_pre_into_precondition(self, gwt: GWTObjects):
+    #     '''
+    #     将gwt对象Given的每一个都转换成Tag类，并加入到Tagged_gwt类的precondition中
+    #     :param gwt:输入的gwt对象
+    #     '''
+    #     nlp = NLP()
+    #     for precond in gwt.given:
+    #         self.precondition.append(nlp.get_flag_of_precondition(precond))
 
-    def add_type_into_postcondition(self, gwt: GWTObjects):
-        nlp = NLP()
-        for postcon in gwt.then:
-            self.postcondition.extend(nlp.get_type_of_postcondition(postcon))
-
-    def add_pre_into_precondition(self, gwt: GWTObjects):
-        '''
-        将gwt对象Given的每一个都转换成Tag类，并加入到Tagged_gwt类的precondition中
-        :param gwt:输入的gwt对象
-        '''
-        nlp = NLP()
-        for precond in gwt.given:
-            self.precondition.append(nlp.get_flag_of_precondition(precond))
 
     def print_allTaggedGWTObject(self):
         print(self.story)
@@ -74,14 +75,14 @@ class Tagged_GWTObject:
         for post in all_tagged_gwt.postcondition:
             self.postcondition.append(post.content)
 
-    def add_pre_into_precondition(self, gwt: GWTObjects):
-        '''
-        将gwt对象Given的每一个都转换成Pre类，并加入到Tag类的precondition中
-        :param gwt:输入的gwt对象
-        '''
-        nlp = NLP()
-        for precond in gwt.given:
-            self.precondition.append(nlp.get_flag_of_precondition(precond))
+    # def add_pre_into_precondition(self, gwt: GWTObjects):
+    #     '''
+    #     将gwt对象Given的每一个都转换成Pre类，并加入到Tag类的precondition中
+    #     :param gwt:输入的gwt对象
+    #     '''
+    #     nlp = NLP()
+    #     for precond in gwt.given:
+    #         self.precondition.append(nlp.get_flag_of_precondition(precond))
 
     def print_tag(self):
         print(self.story)

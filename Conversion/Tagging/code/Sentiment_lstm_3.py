@@ -16,6 +16,8 @@ from keras.models import model_from_yaml
 import jieba
 import pandas as pd
 import sys
+import os
+input_folder_path = os.path.split(os.path.abspath(__file__))[0] + '/'
 
 np.random.seed(1337)  # For Reproducibility
 
@@ -34,8 +36,8 @@ cpu_count = multiprocessing.cpu_count()
 
 # 加载训练文件
 def loadfile():
-    neg = pd.read_excel('data/neg.xls', header=None, index=None)
-    pos = pd.read_excel('data/pos.xls', header=None, index=None)
+    neg = pd.read_excel(input_folder_path + '../data/neg.xls', header=None, index=None)
+    pos = pd.read_excel(input_folder_path + '../data/pos.xls', header=None, index=None)
 
     combined = np.concatenate((pos[0], neg[0]))
     y = np.concatenate((np.ones(len(pos), dtype=int), np.zeros(len(neg), dtype=int)))
@@ -99,7 +101,7 @@ def word2vec_train(combined):
                      iter=n_iterations)
     model.build_vocab(combined)
     model.train(combined)
-    model.save('lstm_data/Word2vec_model.pkl')
+    model.save(input_folder_path + '../lstm_data/Word2vec_model.pkl')
     index_dict, word_vectors, combined = create_dictionaries(model=model, combined=combined)
     return index_dict, word_vectors, combined
 
@@ -141,9 +143,9 @@ def train_lstm(n_symbols, embedding_weights, x_train, y_train, x_test, y_test):
                            batch_size=batch_size)
 
     yaml_string = model.to_yaml()
-    with open('lstm_data/lstm.yml', 'w') as outfile:
+    with open(input_folder_path + '../lstm_data/lstm.yml', 'w') as outfile:
         outfile.write(yaml.dump(yaml_string, default_flow_style=True))
-    model.save_weights('lstm_data/lstm.h5')
+    model.save_weights(input_folder_path + '../lstm_data/lstm.h5')
     print('Test score:', score)
 
 
@@ -165,19 +167,19 @@ def train():
 def input_transform(string):
     words = jieba.lcut(string)
     words = np.array(words).reshape(1, -1)
-    model = Word2Vec.load('lstm_data/Word2vec_model.pkl')
+    model = Word2Vec.load(input_folder_path + '../lstm_data/Word2vec_model.pkl')
     _, _, combined = create_dictionaries(model, words)
     return combined
 
 
 def lstm_predict(string):
     print('loading model......')
-    with open('lstm_data/lstm.yml', 'r') as f:
+    with open(input_folder_path + '../lstm_data/lstm.yml', 'r') as f:
         yaml_string = yaml.load(f)
     model = model_from_yaml(yaml_string)
 
     print('loading weights......')
-    model.load_weights('lstm_data/lstm.h5')
+    model.load_weights(input_folder_path + '../lstm_data/lstm.h5')
     model.compile(loss='binary_crossentropy',
                   optimizer='adam', metrics=['accuracy'])
     data = input_transform(string)
@@ -186,18 +188,20 @@ def lstm_predict(string):
     result = model.predict_classes(data)
     if result[0][0] == 1:
         print(string, ' positive')
+        return 1
     else:
         print(string, ' negative')
+        return 0
 
 
 def lstm_double_predict(self, string1='', string2=''):
     print('loading model......')
-    with open('lstm_data/lstm.yml', 'r') as f:
+    with open(input_folder_path + '../lstm_data/lstm.yml', 'r') as f:
         yaml_string = yaml.load(f)
     model = model_from_yaml(yaml_string)
 
     print('loading weights......')
-    model.load_weights('lstm_data/lstm.h5')
+    model.load_weights(input_folder_path + '../lstm_data/lstm.h5')
     model.compile(loss='binary_crossentropy',
                   optimizer='adam', metrics=['accuracy'])
     data1 = input_transform(string1)
@@ -218,7 +222,5 @@ def lstm_double_predict(self, string1='', string2=''):
 
 if __name__ == '__main__':
     train()
-
     string = '东西非常不错，安装师傅很负责人，装的也很漂亮，精致，谢谢安装师傅！'
-
     lstm_predict(string)

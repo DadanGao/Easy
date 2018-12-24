@@ -7,7 +7,7 @@ import os
 path = os.path.abspath("../")
 sys.path.append(path)
 from Input.file import GWTFile
-from Conversion.Tagging.GWTToTagged_GWT import GWTToTag
+from Conversion.Tagging.GWTToTaggedGWT import GWTToTag
 from Conversion.BranchMerge.MergeBranch import MergeBranch
 
 def index(request):

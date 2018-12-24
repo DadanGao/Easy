@@ -6,8 +6,9 @@ from Input.GWT import GWTObjects
 from Conversion.Tagging.Tag_of_precondition import Tag
 from Conversion.Tagging.Tag_of_action import Tag_of_action
 from Conversion.Tagging.Tag_of_postcondition import Tag_of_postcondition
-
-# import jieba
+from Conversion.Tagging.Similarity import similarity
+from Conversion.Tagging.predict_3 import predictor
+from Conversion.Tagging.Tagged_GWTObject import All_Tagged_GWTObject
 
 import os
 import re
@@ -75,6 +76,11 @@ class NLP:
 
     def get_flag_of_precondition(self, s1):
         '''
+        积极 1
+        消极 0
+        global 3
+        无分支 2
+
         :param s1: given list中的一个precondition
         :return: 该段字符串的flag
         '''
@@ -96,10 +102,8 @@ class NLP:
         pre1 = Tag(s1, flag)
         return pre1
 
-
     def get_type_of_precondition(self):
         pass
-
 
     def get_type_of_action(self, s1=''):
         '''
@@ -154,3 +158,49 @@ class NLP:
         else:
             result_list.append(Tag_of_postcondition(s1, 'none_validation'))
         return result_list
+
+    def get_similiar_precondtion_and_postcondition(self, gwtlist):
+        '''
+        遍历postcondition和precondition，通过相似度
+        得到一个分支的前面gwt和两个分支gwt
+        并将两个分支gwt的precondition变成前面gwt的postcondition
+        同时使用情感分析得到分支gwt的感情，得到pre的tag对象
+        :param gwtlist:
+        :return:
+        '''
+        tagged_gwt_list = []
+        simi = similarity()
+        content = ''
+        predictor1 = predictor()
+        all_post_conditions = []
+        # all_post_conditions = [post for post in [postgwt.then for postgwt in gwtlist]]
+        for post in [postgwt.then for postgwt in gwtlist]:
+            for item in post:
+                all_post_conditions.append(item)
+        for pregwt in gwtlist:
+            all_tagged_gwt = All_Tagged_GWTObject(pregwt)
+            for precon in pregwt.given:
+                flag = -1
+                for postcon in all_post_conditions:
+                    if 'GLOBAL' in precon:
+                        precon = re.sub('GLOBAL', '', precon)
+                        flag = 3
+                        pre1 = Tag(precon, flag)
+                        all_tagged_gwt.precondition.append(pre1)
+                        break
+                    elif simi.similar(postcon, precon):
+                        flag = predictor1.predict_sentence(precon)
+                        content = postcon
+                        pre1 = Tag(content, flag)
+                        all_tagged_gwt.precondition.append(pre1)
+                if flag == -1:
+                    flag = 2
+                    content = precon
+                    pre1 = Tag(content, flag)
+                    all_tagged_gwt.precondition.append(pre1)
+            for action in pregwt.when:
+                all_tagged_gwt.action.extend(self.get_type_of_action(action))
+            for postcondition1 in pregwt.then:
+                all_tagged_gwt.postcondition.extend(self.get_type_of_postcondition(postcondition1))
+            tagged_gwt_list.append(all_tagged_gwt)
+        return tagged_gwt_list

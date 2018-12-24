@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-import sys
-
-sys.path.append("code")
 from Conversion.Tagging.code.Sentiment_svm_3 import svm_predict
 from Conversion.Tagging.code.Sentiment_lstm_3 import lstm_predict, lstm_double_predict
+
 
 # argvs_lenght = len(sys.argv)
 # if argvs_lenght != 3:
@@ -28,15 +26,15 @@ class predictor:
 
     def predict_sentence(self, sentence=''):
         if self.type == 'lstm':
-            lstm_predict(sentence)
+            return lstm_predict(sentence)
         elif self.type == 'svm':
-            svm_predict(sentence)
+            return svm_predict(sentence)
 
     def predict_double_sentence(self, string1, string2):
         if self.type == 'lstm':
             return lstm_double_predict(string1, string2)
         elif self.type == 'svm':
-            return '',''
+            return '', ''
 
 
 if __name__ == "__main__":
