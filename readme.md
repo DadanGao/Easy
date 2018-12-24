@@ -2,6 +2,16 @@
 ===============================
 
 # update notes
+## 2018.12.24
+
+    在分支情感判定和分支合并过程中加入了情感分析（使用lstm)和tf相似度
+    更新项目依赖库文件，可以使用requirements.txt进行环境的搭建
+```
+sudo pip install -r requirements.txt
+```
+    
+    
+
 ## 2018.12.9
     项目使用的是Python 3.6版本， Django 2.1.4版本， jieba分词
     项目运行说明，参考命令
