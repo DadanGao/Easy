@@ -2,13 +2,13 @@
 # !/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from Input.GWT import GWTObjects
 from Conversion.Tagging.Tag_of_precondition import Tag
 from Conversion.Tagging.Tag_of_action import Tag_of_action
 from Conversion.Tagging.Tag_of_postcondition import Tag_of_postcondition
 from Conversion.Tagging.Similarity import similarity
 from Conversion.Tagging.predict_3 import predictor
 from Conversion.Tagging.Tagged_GWTObject import All_Tagged_GWTObject
+from pyhanlp import *
 
 import os
 import re
@@ -36,12 +36,6 @@ class NLP:
         :param tag:标志
         '''
         self.lists.append([word, tag, sub_word])
-
-    def participle(self, gwt: GWTObjects):
-        '''
-        后续分词可能会使用
-        '''
-        pass
 
     def load_pos_neg_dict(self, f=file_path):
         '''
@@ -102,39 +96,38 @@ class NLP:
         pre1 = Tag(s1, flag)
         return pre1
 
-    def get_type_of_precondition(self):
-        pass
-
     def get_type_of_action(self, s1=''):
         '''
         得到
         :param s1:string, action
         :return:
         '''
+        s1 = self.nlp_action(s1)
         resultlist = []
         _type = ''
-        if 'INCLUDE' in s1:
-            _type = 'include'
-            tag_action = Tag_of_action(s1, _type)
-            resultlist.append(tag_action)
-            return resultlist
-        elif 'EXTEND' in s1:
-            _type = 'extend'
-            tag_action = Tag_of_action(s1, _type)
-            resultlist.append(tag_action)
-            return resultlist
-        elif 'DO' in s1:
-            sentence_list = re.split(pattern, s1)
-            length = len(sentence_list)
-            resultlist.append(Tag_of_action(sentence_list[0], 'do_start'))
-            if 'UNTIL' in s1:
-                resultlist.append(Tag_of_action(sentence_list[length - 1], 'until'))
-            if length > 2:
-                for i in range(1, length - 1):
-                    resultlist.append(Tag_of_action(sentence_list[i], 'do_mid'))
-            return resultlist
+        # if 'INCLUDE' in s1:
+        #     _type = 'include'
+        #     tag_action = Tag_of_action(s1, _type)
+        #     resultlist.append(tag_action)
+        #     return resultlist
+        # elif 'EXTEND' in s1:
+        #     _type = 'extend'
+        #     tag_action = Tag_of_action(s1, _type)
+        #     resultlist.append(tag_action)
+        #     return resultlist
+        # elif 'DO' in s1:
+        #     sentence_list = re.split(pattern, s1)
+        #     length = len(sentence_list)
+        #     resultlist.append(Tag_of_action(sentence_list[0], 'do_start'))
+        #     if 'UNTIL' in s1:
+        #         resultlist.append(Tag_of_action(sentence_list[length - 1], 'until'))
+        #     if length > 2:
+        #         for i in range(1, length - 1):
+        #             resultlist.append(Tag_of_action(sentence_list[i], 'do_mid'))
+        #     return resultlist
 
-        elif '如果' in s1:
+        if '如果' in s1:
+        # elif '如果' in s1:
             sentence_list = re.split(pattern, s1)
             length = len(sentence_list)
             resultlist.append(Tag_of_action(sentence_list[0].replace('如果', 'IF ') + ' Then', 'if_start'))
@@ -146,9 +139,13 @@ class NLP:
             resultlist.append(Tag_of_action('ENDIF', 'normal'))
             return resultlist
         else:
-            _type = 'normal'
-            tag_action = Tag_of_action(s1, _type)
-            resultlist.append(tag_action)
+            sentence_list = re.split(pattern, s1)
+            for i in range(0, len(sentence_list)):
+                _type = 'normal'
+                if sentence_list[i] == '':
+                    continue
+                tag_action = Tag_of_action(sentence_list[i], _type)
+                resultlist.append(tag_action)
             return resultlist
 
     def get_type_of_postcondition(self, s1=''):
@@ -204,3 +201,196 @@ class NLP:
                 all_tagged_gwt.postcondition.extend(self.get_type_of_postcondition(postcondition1))
             tagged_gwt_list.append(all_tagged_gwt)
         return tagged_gwt_list
+
+    def nlp_action(self, s1):
+        '''
+        对when中的每行数据进行提取，争取把信息补全，以达到比较高的适应性
+        调用hanlp的依存句法分析
+
+        eg1：正常的主谓宾短语
+        输入：用户输入账号
+
+        处理过程：
+        用户 -- 主谓关系
+        输入 -- 核心关系
+        账号 -- 动宾关系
+
+        输出：用户输入账号
+
+        eg2:
+        输入： 用户输入账号、密码 or 用户输入账号和密码
+
+        处理过程：
+        用户 -- 主谓关系
+        输入 -- 核心关系
+        账号 -- 动宾关系
+        、 -- 标点符号           和 -- 左附加关系
+        密码 -- 并列关系
+
+        输出：1 用户输入账号
+            2 用户输入密码
+
+        eg3:
+        输入：用户输入账号和密码，点击取钱，输入取款金额
+
+        处理过程：
+        用户 -- 主谓关系
+        输入 -- 核心关系
+        账号 -- 动宾关系
+        和 -- 左附加关系
+        密码 -- 并列关系
+        ， -- 标点符号
+        点击 -- 并列关系
+        取钱 -- 动宾关系
+        ， -- 标点符号
+        输入 -- 并列关系
+        取款 -- 定中关系
+        金额 -- 动宾关系
+
+        输出：
+        用户输入账号
+        用户输入密码
+        用户点击取钱
+        用户输入取款金额
+
+        eg4: 不同主语
+        输入：用户输入账号和密码，系统显示取钱页面
+
+        处理过程：用户 --(主谓关系)--> 输入
+        输入 --(核心关系)--> ##核心##
+        账号 --(动宾关系)--> 输入
+        和 --(左附加关系)--> 密码
+        密码 --(并列关系)--> 账号
+        ， --(标点符号)--> 输入
+        系统 --(主谓关系)--> 显示
+        显示 --(并列关系)--> 输入
+        取钱 --(定中关系)--> 页面
+        页面 --(动宾关系)--> 显示
+
+        输出：
+        用户输入账号
+        用户输入密码
+        系统显示取钱页面
+
+        eg5：if else
+        输入： 如果执行预计算，则预期预计算路径成功，客户确认路径，点击应用。如果不执行预计算，则客户点击应用
+
+        处理过程：
+        如果 --(状中结构)--> 执行
+        执行 --(核心关系)--> ##核心##
+        预计算 --(动宾关系)--> 执行
+        ， --(标点符号)--> 执行
+        则 --(状中结构)--> 预期
+        预期 --(并列关系)--> 执行
+        预计算 --(定中关系)--> 路径
+        路径 --(主谓关系)--> 成功
+        成功 --(动宾关系)--> 预期
+        ， --(标点符号)--> 预期
+        客户 --(主谓关系)--> 确认
+        确认 --(并列关系)--> 预期
+        路径 --(动宾关系)--> 确认
+        ， --(标点符号)--> 确认
+        点击 --(并列关系)--> 确认
+        应用 --(动宾关系)--> 点击
+        。 --(标点符号)--> 执行
+        如果 --(状中结构)--> 执行
+        不 --(状中结构)--> 执行
+        执行 --(并列关系)--> 执行
+        预计算 --(动宾关系)--> 执行
+        ， --(标点符号)--> 执行
+        则 --(状中结构)--> 点击
+        客户 --(主谓关系)--> 点击
+        点击 --(并列关系)--> 执行
+        应用 -- (并列关系)--> 点击
+
+        输出：
+        如果执行预计算，则预期预计算路径成功，客户确认路径，客户点击应用。如果不执行预计算，则客户点击应用
+
+
+        :param s1: gwtobejct中的when的每个数据
+        :return: 返回修改后的action列表
+        '''
+        temp = HanLP.parseDependency(s1)
+        word_array = temp.getWordArray()
+        # for word in word_array:
+        #     print("%s --(%s)--> %s" % (word.LEMMA, word.DEPREL, word.HEAD.LEMMA))
+        # print(len(word_array))
+        # print()
+
+        result = ''  # 返回的结果str
+        user = ''  #
+        action = ''  # 动作
+        pre = 1
+        mid = 1
+        post = 1
+        temp_pre = ''
+        temp_mid = ''
+        temp_post = ''
+        suffix = '{'
+        i = 0
+        if len(word_array) == 1:
+            return word_array[0].LEMMA
+        while i < len(word_array):
+            if word_array[i].DEPREL == '主谓关系':
+                user = word_array[i].LEMMA
+                i += 1
+                pre = 0
+                continue
+            if word_array[i].DEPREL == "核心关系":
+                action = word_array[i].LEMMA
+                i += 1
+                mid = 0
+                continue
+            if word_array[i].DEPREL == "动宾关系":
+                result += temp_pre + user + temp_mid + action + temp_post + word_array[i].LEMMA + suffix
+                i += 1
+                post = 0
+                continue
+            if word_array[i].DEPREL == "并列关系":
+                temp = word_array[i].HEAD
+                pre = 0
+                while temp.DEPREL != '核心关系' and temp.DEPREL != '动宾关系' and temp.DEPREL is not None:
+                    temp = temp.HEAD
+                if temp.DEPREL == '核心关系':
+                    action = word_array[i].LEMMA
+                    mid = 0
+                    i += 1
+                    continue
+                if temp.DEPREL == "动宾关系":
+                    result += temp_pre + user + temp_mid + action + temp_post + word_array[i].LEMMA + suffix
+                    i += 1
+                    post = 0
+                    continue
+                i += 1
+            if word_array[i].DEPREL == "标点符号":
+                if pre + mid + post >= 1:
+                    result += temp_pre + user + temp_mid + action + temp_post + suffix
+                pre = mid = post = 1
+                temp_pre = temp_post = temp_mid = ""
+                i += 1
+                continue
+            if word_array[i].DEPREL == "左附加关系":
+                post = 1
+                i += 1
+                continue
+            if pre == 1:
+                temp_pre += word_array[i].LEMMA
+                i += 1
+                pre = 0
+                continue
+            if mid == 1:
+                temp_mid += word_array[i].LEMMA
+                i += 1
+                continue
+            if post == 1:
+                temp_post += word_array[i].LEMMA
+                i += 1
+                continue
+            i += 1
+        return result
+
+
+if __name__ == "__main__":
+    nlp = NLP()
+    s1 = "用户输入账号与密码"
+    print(nlp.nlp_action(s1))

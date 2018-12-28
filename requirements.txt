@@ -10,3 +10,4 @@ pandas==0.18.1
 Theano==0.8.2
 xlrd
 Django==2.1.4
+pyhanlp

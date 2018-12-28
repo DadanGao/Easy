@@ -6,6 +6,8 @@ from Conversion.Tagging.Tagged_GWTObject import Tagged_GWTObject
 from Input.GWT import GWTObjects
 from Conversion.Tagging.Tagged_GWTObject import All_Tagged_GWTObject
 from Conversion.Tagging.NLP import NLP
+
+
 class GWTToTag:
     # 将gwt转换成tagged_gwt
     def gwt_to_tag(self, gwt: GWTObjects):
@@ -31,10 +33,6 @@ class GWTToTag:
     def gwt_to_allTagged(self, gwt: GWTObjects):
         allTagged_gwt = All_Tagged_GWTObject(gwt)
         return allTagged_gwt
-
-    def get_branches_of_validation(self, gwtlist):
-        pass
-
 
     def add_type_into_precondition(self, gwtlist):
         '''

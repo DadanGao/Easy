@@ -4,7 +4,14 @@
 from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 from scipy.linalg import norm
+from aip import AipNlp
 
+""" 你的 APPID AK SK """
+APP_ID = '15286059'
+API_KEY = 'VyGwFUCPlIBiRPLwgsoKVnXA'
+SECRET_KEY = 'a789oyNOKrIERnRzqNZgVwxDBbZeheGO'
+
+client = AipNlp(APP_ID, API_KEY, SECRET_KEY)
 
 class similarity:
     def __init__(self):
@@ -29,14 +36,13 @@ class similarity:
         else:
             return False
 
-
-    def get_similiar_branches(self, gwtlist):
-        '''
-        需要复制gwt，进行相似度计算后分到两个list钟
-        :param gwtlist:得到的gwtlist
-        :return:返回两个list，一个是没有分支的gwt，一个是包含两个分支的gwt: list[][2] 0是negative 1是postitive
-        '''
-        pass
-
-
-
+    def baidu_similar(selfs, s1, s2):
+        # 设置可选参数
+        options = {}
+        options["model"] = "CNN"
+        """ 带参数调用短文本相似度 """
+        dict = client.simnet(s1, s2, options)
+        if dict['score'] >= 0.6:
+            return True
+        else:
+            return False

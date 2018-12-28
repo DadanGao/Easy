@@ -17,7 +17,6 @@ gwt_objects = file.get_gwt_objects()
 # 进行gwt转tag对象
 transformer = GWTToTag()
 tag_objects = transformer.gwtlist_to_taglist(gwt_objects)
-print(1)
 # tag_objects[2].precondition[0].content = "收到位置传感器返回的值"
 merge_obj = MergeBranch(tag_objects)
 rucm_obj = merge_obj.rucm_obj

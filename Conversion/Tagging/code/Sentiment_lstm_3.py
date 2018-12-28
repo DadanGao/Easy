@@ -173,12 +173,12 @@ def input_transform(string):
 
 
 def lstm_predict(string):
-    print('loading model......')
+    # print('loading model......')
     with open(input_folder_path + '../lstm_data/lstm.yml', 'r') as f:
         yaml_string = yaml.load(f)
     model = model_from_yaml(yaml_string)
 
-    print('loading weights......')
+    # print('loading weights......')
     model.load_weights(input_folder_path + '../lstm_data/lstm.h5')
     model.compile(loss='binary_crossentropy',
                   optimizer='adam', metrics=['accuracy'])
@@ -222,5 +222,5 @@ def lstm_double_predict(self, string1='', string2=''):
 
 if __name__ == '__main__':
     train()
-    string = '东西非常不错，安装师傅很负责人，装的也很漂亮，精致，谢谢安装师傅！'
+    string = '收到位置传感器返回的值'
     lstm_predict(string)
