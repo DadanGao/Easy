@@ -1,9 +1,10 @@
 from django.http import HttpResponse
 from django.template import loader
 import sys
+import os
 sys.path.append(r'E:\master\workspace\python\gaoruan\Easy')
 from Input.file import GWTFile
-from Conversion.Tagging.GWTToTag import GWTToTag
+from Conversion.Tagging.GWTToTagged_GWT import GWTToTag
 from Conversion.BranchMerge.MergeBranch import MergeBranch
 
 def index(request):
@@ -16,7 +17,17 @@ def index(request):
 
 
 def transform(request):
-    filepath =  request.POST['theFilePath'];
+    if request.method == "POST":  # 请求方法为POST时，进行处理
+        myFile = request.FILES.get("theFile", None)  # 获取上传的文件，如果没有文件，则默认为None
+        if not myFile:
+            return HttpResponse("no files for upload!")
+        print(myFile.name)
+        destination = open(os.path.join("G:\\upload", myFile.name), 'wb+')  # 打开特定的文件进行二进制的写操作
+        for chunk in myFile.chunks():  # 分块写入文件
+            print(chunk)
+            destination.write(chunk)
+        destination.close()
+    filepath =  os.path.join("G:\\upload", myFile.name);
     file_object = open(filepath, 'r', encoding = 'utf-8')
     try:
         file_context = file_object.readlines()
@@ -45,3 +56,12 @@ def transform(request):
         'RUCM':rucm_obj
     }
     return HttpResponse(template.render(context, request))
+
+#这种方式简单粗暴，适合小文件的下载，但如果这个文件非常大，这种方式会占用大量的内存，甚至导致服务器崩溃
+def file_download(request):
+    # do something...
+    with open(os.path.join("G:\\upload", "RUCM_result.xls"),'rb') as f:
+        c = f.read()
+    response = HttpResponse(c)
+    response['Content-Disposition'] = 'attachment; filename=RUCM.xls'
+    return response
