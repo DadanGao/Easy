@@ -2,6 +2,22 @@
 ===============================
 
 # update notes
+## 2018.12.28
+    加入了hanlp的句法分析模块，以达到对action较好的适应度（可使用requirements.txt进行安装)
+    自定义词典add.txt，格式为 词 词性 出现的次数，如 轧件跟踪界面 n 3
+    将自定义词典加入到hanlp的词典路径中：
+    1 找到hanlp自定义字典路径： 使用hanlp --version找到文件路径，第二条即为data目录的绝对路径
+    2 打开配置文件：data同级目录下的hanlp.properties文件
+    3 在CustomDictionaryPath=... 中添加一条 add.txt
+    4 将本项目中的add.txt 复制到到data/dictionary/custom/中
+    
+    百度NLP的作用：
+    用于短文本相似度匹配。不过不能自定义词典，是否继续使用百度NLP有待商讨
+
+```
+    句法分析模块还存在不少问题
+    关于句法分析模块的样例，可以参考Conversion/Tagging/NLP中的nlp_action函数的说明
+```
 ## 2018.12.24
 
     在分支情感判定和分支合并过程中加入了情感分析（使用lstm)和tf相似度
