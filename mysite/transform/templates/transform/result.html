@@ -3,19 +3,35 @@
     <head>
         <meta charset="UTF-8">
         <title>需求文档转换结果</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <style type="text/css">
         </style>
     </head>
     <body>
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-md-8 column">
+                    <div class="text-center ">
+                      <caption>GWT文档与RUCM文档对比</caption>
+                    </div>
+                </div>
+                <div class="col-md-4 column">
+                   <a href="{% url 'transform:download'%}" target="_blank" class="btn btn-success fileinput-button" >导出转换结果</a>
+                </div>
+            </div>
+        </div>
+
         <table border="2" width="100%">
-            <caption>GWT文档与RUCM文档对比</caption>
             <tr>
               <th>GWT文档</th>
               <th>RUCM文档</th>
             </tr>
             <tr>
               <td width="40%">
-                <div class="panel-body" style="height: 600px; overflow:scroll">
+                <div class="panel-body" style="height: 800px; overflow:scroll">
                     <div style="border: 1px  #000000; width: 98%; margin: 0 auto;">
                         <span>
                           {% for line in GWT%}
@@ -26,7 +42,7 @@
                 </div>
                 </td>
                 <td width="60%">
-                    <div class="panel-body" style="height: 600px; overflow:scroll">
+                    <div class="panel-body" style="height: 800px; overflow:scroll">
                         <div style="border: 1px  #000000; width: 98%; margin: 0 auto;">
                             <table border="1" width="100%" style="border-color: #89c5ee">
                                 <caption>自动生成的RUCM文档</caption>
