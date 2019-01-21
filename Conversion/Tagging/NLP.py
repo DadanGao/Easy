@@ -14,7 +14,8 @@ import os
 import re
 
 re_positive_negative_dic = re.compile('^(.+?)( [0-9]+)( .+)?$', re.U)
-path = os.path.abspath('../Tagging')
+path = os.path.abspath('../Conversion/Tagging')# 使用Django
+# path = os.path.abspath('../Conversion/Tagging') #不使用Django
 file_path = path + '/positive_negative_dic'
 
 pattern = r',|\.|/|;|\'|`|\[|\]|<|>|\?|:|"|\{|\}|\~|!|@|#|\$|%|\^|&|\(|\)|-|=|\_|\+|，|。|、|；|‘|’|【|】|·|！|…|（|）'
@@ -93,8 +94,7 @@ class NLP:
                 break
         if flag == -1:
             flag = 2
-        pre1 = Tag(s1, flag)
-        return pre1
+        return flag
 
     def get_type_of_action(self, s1=''):
         '''
@@ -127,7 +127,7 @@ class NLP:
         #     return resultlist
 
         if '如果' in s1:
-        # elif '如果' in s1:
+            # elif '如果' in s1:
             sentence_list = re.split(pattern, s1)
             length = len(sentence_list)
             resultlist.append(Tag_of_action(sentence_list[0].replace('如果', 'IF ') + ' Then', 'if_start'))
@@ -155,6 +155,46 @@ class NLP:
         else:
             result_list.append(Tag_of_postcondition(s1, 'none_validation'))
         return result_list
+
+    def get_tagged_gwt_list_reg(self, gwtlist):
+        '''
+        使用reg来匹配情感
+        :param gwtlist:
+        :return:
+        '''
+        tagged_gwt_list = []
+        content = ''
+        all_post_conditions = []
+        for post in [postgwt.then for postgwt in gwtlist]:
+            for item in post:
+                all_post_conditions.append(item)
+        for gwt in gwtlist:
+            all_tagged_gwt = All_Tagged_GWTObject(gwt)
+            for precon in gwt.given:
+                flag = -1
+                if 'GLOBAL' in precon:
+                    precon = re.sub('GLOBAL', '', precon)
+                    flag = 3
+                    content = precon
+                    pre1 = Tag(content, flag)
+                    all_tagged_gwt.precondition.append(pre1)
+                for postcon in all_post_conditions:
+                    if similarity().similar(precon, postcon):
+                        flag = self.get_flag_of_precondition(precon)
+                        content = postcon
+                        pre1 = Tag(content, flag)
+                        all_tagged_gwt.precondition.append(pre1)
+                if flag == -1:
+                    flag = 2
+                    content = precon
+                    pre1 = Tag(content, flag)
+                    all_tagged_gwt.precondition.append(pre1)
+            for action in gwt.when:
+                all_tagged_gwt.action.extend(self.get_type_of_action(action))
+            for postcondition1 in gwt.then:
+                all_tagged_gwt.postcondition.extend(self.get_type_of_postcondition(postcondition1))
+            tagged_gwt_list.append(all_tagged_gwt)
+        return tagged_gwt_list
 
     def get_similiar_precondtion_and_postcondition(self, gwtlist):
         '''
@@ -186,6 +226,13 @@ class NLP:
                         all_tagged_gwt.precondition.append(pre1)
                         break
                     elif simi.similar(postcon, precon):
+                        # for l in self.lists:
+                        #     regex = r'' + l[0]
+                        #     re_compile = re.compile(regex, re.U)
+                        #     res = re_compile.search(precon)
+                        #     if res is not None:
+                        #         flag = int(l[1])
+
                         flag = predictor1.predict_sentence(precon)
                         content = postcon
                         pre1 = Tag(content, flag)

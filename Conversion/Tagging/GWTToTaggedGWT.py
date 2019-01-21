@@ -22,13 +22,14 @@ class GWTToTag:
         return tagged_gwt
 
     # 将输入的gwtlist转换成tagged_gwt_list
-    def old_gwtlist_to_taglist(self, gwtlist):
+    def gwtlist_to_taglist_reg(self, gwtlist):
         gwtlist = gwtlist if gwtlist is not None else []
+        all_tagged_gwt_list = NLP().get_tagged_gwt_list_reg(gwtlist)
         tagged_gwt_list = []
-        for gwt in gwtlist:
-            tagged_gwt_list.append(self.gwt_to_tag(gwt))
-
+        for alltaggedgwt in all_tagged_gwt_list:
+            tagged_gwt_list.append(Tagged_GWTObject(alltaggedgwt))
         return tagged_gwt_list
+
 
     def gwt_to_allTagged(self, gwt: GWTObjects):
         allTagged_gwt = All_Tagged_GWTObject(gwt)
@@ -43,7 +44,7 @@ class GWTToTag:
         NLP().get_similiar_precondtion_and_postcondition(gwtlist)
 
     # 将输入的gwtlist转换成tagged_gwt_list
-    def gwtlist_to_taglist(self, gwtlist):
+    def gwtlist_to_taglist_lstm(self, gwtlist):
         gwtlist = gwtlist if gwtlist is not None else []
         all_tagged_gwt_list = NLP().get_similiar_precondtion_and_postcondition(gwtlist)
         tagged_gwt_list = []

@@ -222,5 +222,5 @@ def lstm_double_predict(self, string1='', string2=''):
 
 if __name__ == '__main__':
     train()
-    string = '收到位置传感器返回的值'
+    string = '主叫欠费'
     lstm_predict(string)

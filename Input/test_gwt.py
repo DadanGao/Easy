@@ -22,7 +22,7 @@ test_obj = [GWTObjects(test_story, test_scenario, test_given[0], test_when[0], t
 
 # import from .txt file or path
 test_path = './gwt files'
-test_file = './gwt files/gwt.txt'
+test_file = './gwt files/gwt1.txt'
 
 file = GWTFile(test_file)
 objects = file.get_gwt_objects()
